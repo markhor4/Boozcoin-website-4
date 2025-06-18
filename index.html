@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com https://api.coingecko.com 'sha256-udgDJrpa9XbgiZEztwbphc4Uo2q5SYAc5RFb1Axg5h8T7Vy'; connect-src 'self' https://api.coingecko.com ws://localhost:* http://localhost:*; style-src 'self' 'unsafe-inline'; img-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com https://api.coingecko.com https://cdn.jsdelivr.net; connect-src 'self' https://api.coingecko.com https://pro-api.coinmarketcap.com ws://localhost:* http://localhost:* https://solana-api.devnet.solana.com; style-src 'self' 'unsafe-inline'; img-src 'self';">
     <title>Boozer (BoozCoin) - Solana Meme Coin</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -30,32 +30,34 @@
         <div class="presale-card">
             <h2>Auto Presale: Grab Your BOOZ! 🍺</h2>
             <p>Join the presale and get your share of 300M BOOZ tokens! Pay with SOL.</p>
-            <div class="timer" id="presale-timer">Presale Starts on June 25, 2025!</div>
-            <div class="price-info" id="price-info">Current Price: $0.00003 per BOOZ (🍺 Boozer Shot)</div>
+            <div class="timer" id="presale-timer" aria-live="polite">Presale Starts on July 5, 2025!</div>
+            <div class="price-info" id="price-info" aria-live="polite">Current Price: $0.00003 per BOOZ (🍺 Boozer Shot)</div>
             <div class="price-note">Prices increase gradually so Grab Your BOOZ early!</div>
-            <p>Current SOL Price: <span id="sol-price">Fetching...</span> USD</p>
-            <p>Tokens Sold: <span id="tokens-sold">0</span>/300M</p>
+            <p>Current SOL Price: <span id="sol-price" aria-live="polite">Fetching...</span> USD</p>
+            <p>Tokens Sold: <span id="tokens-sold" aria-live="polite">0</span>/300M</p>
             <div class="progress-bar">
                 <div class="progress" id="progress-bar"></div>
             </div>
             <p>Enter 0.05–5 SOL to buy BOOZ!</p>
-            <input type="number" id="sol-amount" placeholder="Enter SOL amount" min="0.05" max="5" step="0.0001" value="0.05">
+            <button id="connect-wallet" aria-label="Connect Solana wallet">Connect Wallet</button>
+            <input type="number" id="sol-amount" placeholder="Enter SOL amount" min="0.05" max="5" step="0.0001" value="0.05" aria-label="Enter SOL amount to buy BOOZ tokens">
             <div class="result-boxes">
                 <div class="result-box">
-                    <p>You’ll get: <span id="booz-amount">0</span> BOOZ</p>
+                    <p>You’ll get: <span id="booz-amount" aria-live="polite">0</span> BOOZ</p>
                 </div>
                 <div class="result-box">
-                    <p>Total Cost: <span id="usd-cost">0</span> USD</p>
+                    <p>Total Cost: <span id="usd-cost" aria-live="polite">0</span> USD</p>
                 </div>
             </div>
-            <button onclick="buyBooz()">Buy BOOZ Now</button>
-            <p class="wallet-info">Presale Wallet: HY6po9XbgiZEztwbphc4Uo2q5SYAc5RFb1Axg5h8T7Vy</p>
+            <button id="buy-button" disabled aria-label="Buy BOOZ tokens now">Buy BOOZ Now</button>
+            <p class="wallet-info">Presale Wallet: <a href="https://solscan.io/account/HY6po9XbgiZEztwbphc4Uo2q5SYAc5RFb1Axg5h8T7Vy" target="_blank">HY6po9XbgiZEztwbphc4Uo2q5SYAc5RFb1Axg5h8T7Vy</a></p>
+            <p class="verification-notice">Payments are verified on-chain. After paying, submit your transaction ID via our <a id="google-form-link" href="https://forms.gle/g65gQvYcSbqB67ox5" target="_blank">Google Form</a>. Form not set up yet? Check <a href="https://x.com/boozer_coin" target="_blank">X</a> for updates.</p>
             <p class="airdrop-info">Airdrop live now! Join on <a href="https://x.com/boozer_coin" target="_blank">X</a>.</p>
 
             <!-- Transaction History -->
             <div class="transaction-history">
                 <h3>Your Transactions</h3>
-                <ul id="transaction-list"></ul>
+                <ul id="transaction-list" aria-live="polite"></ul>
             </div>
         </div>
     </section>
@@ -172,7 +174,10 @@
         </div>
     </section>
 
-    <script defer src="https://unpkg.com/@solana/pay/dist/index.js"></script>
+    <script defer src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+    <script defer src="https://unpkg.com/@solana/pay@latest/dist/index.global.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-base@0.9.23/dist/index.umd.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-phantom@0.9.23/dist/index.umd.min.js"></script>
     <script defer src="script.js"></script>
 </body>
 </html>
