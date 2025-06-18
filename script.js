@@ -10,8 +10,7 @@ const FIELDS = {
 // Solana Pay configuration
 const RECIPIENT = '3j73rkUNf6cs4FpaPNse9Wkmvkf5a6RA47kNS5jfgy8D'; // Devnet presale wallet
 const TOTAL_TOKENS = 300000000; // 300M BOOZ tokens for presale
-// const PRE_SALE_START = new Date('2025-07-07T14:00:00Z'); // Production
-const PRE_SALE_START = new Date('2025-06-18T14:00:00Z'); // Temporary for testing
+const PRE_SALE_START = new Date('2025-06-18T14:00:00Z'); // Temporary for testing (Devnet)
 
 // DOM elements
 const connectWalletBtn = document.getElementById('connect-wallet');
@@ -105,13 +104,13 @@ async function fetchSolPrice() {
     }
     try {
         const response = await fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=SOL&convert=USD', {
-            headers: { 'X-CMC_PRO_API_KEY': '58a04bb4-6d12-489f-8116-79593dc70be2' }
+            headers: { 'X-CMC Coinbase Cloud': 'https://pro-api.coinmarketcap.com' }
         });
         const data = await response.json();
         if (data.status.error_code === 0) {
             solPriceInUSD = data.data.SOL.quote.USD.price;
             localStorage.setItem('cachedSolPrice', solPriceInUSD);
-            solPriceSpan.textContent = `$${solPriceInUSD.toFixed(2)} (CoinMarketCap)`;
+            solPriceSpan.textContent = `$${solPriceInUSD.toFixed(2)}`;
             updateCalculations();
             return;
         } else {
@@ -178,7 +177,8 @@ function checkPresaleStatus() {
         const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
         presaleTimer.textContent = `Presale Starts in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
     } else {
-        presaleTimer.textContent = 'Presale Ongoing! Submit tx ID after payment.';
+        presaleTimer.textContent = 'Presale Ongoing! Submit tx ID after payment';
+        buyButton.disabled = false;
     }
 }
 
@@ -294,12 +294,18 @@ async function buyBooz() {
         buyButton.disabled = true;
         buyButton.textContent = 'Processing...';
 
-        const connection = new SolanaWeb3.Connection(SolanaWeb3.clusterApiUrl('devnet'), 'confirmed');
-        const recipientPubkey = new SolanaWeb3.PublicKey(RECIPIENT);
-        const lamports = Math.floor(solAmount * SolanaWeb3.LAMPORTS_PER_SOL);
+        // Check if SolanaWeb3 is available
+        if (!window.SolanaWeb3) {
+            throw new Error('SolanaWeb3 library failed to load. Please refresh the page or check your internet connection.');
+        }
 
-        const transaction = new SolanaWeb3.Transaction().add(
-            SolanaWeb3.SystemProgram.transfer({
+        const { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } = window.SolanaWeb3;
+        const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
+        const recipientPubkey = new PublicKey(RECIPIENT);
+        const lamports = Math.floor(solAmount * LAMPORTS_PER_SOL);
+
+        const transaction = new Transaction().add(
+            SystemProgram.transfer({
                 fromPubkey: wallet.publicKey,
                 toPubkey: recipientPubkey,
                 lamports
@@ -355,3 +361,10 @@ updatePriceDisplay();
 updateCalculations();
 validateStorage();
 renderTransactions();
+
+// Log SolanaWeb3 availability for debugging
+if (typeof window.SolanaWeb3 === 'undefined') {
+    console.error('SolanaWeb3 is not defined. Check script tag in index.html or CDN availability.');
+} else {
+    console.log('SolanaWeb3 loaded successfully:', window.SolanaWeb3);
+}
