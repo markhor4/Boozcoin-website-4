@@ -104,13 +104,13 @@ async function fetchSolPrice() {
     }
     try {
         const response = await fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=SOL&convert=USD', {
-            headers: { 'X-CMC Coinbase Cloud': 'https://pro-api.coinmarketcap.com' }
+            headers: { 'X-CMC_PRO_API_KEY': 'your-coinmarketcap-api-key' } // Replace with your actual key
         });
         const data = await response.json();
         if (data.status.error_code === 0) {
             solPriceInUSD = data.data.SOL.quote.USD.price;
             localStorage.setItem('cachedSolPrice', solPriceInUSD);
-            solPriceSpan.textContent = `$${solPriceInUSD.toFixed(2)}`;
+            solPriceSpan.textContent = `$${solPriceInUSD.toFixed(2)} (CoinMarketCap)`;
             updateCalculations();
             return;
         } else {
@@ -177,8 +177,7 @@ function checkPresaleStatus() {
         const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
         presaleTimer.textContent = `Presale Starts in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
     } else {
-        presaleTimer.textContent = 'Presale Ongoing! Submit tx ID after payment';
-        buyButton.disabled = false;
+        presaleTimer.textContent = 'Presale Ongoing! Submit tx ID after payment.';
     }
 }
 
@@ -296,7 +295,8 @@ async function buyBooz() {
 
         // Check if SolanaWeb3 is available
         if (!window.SolanaWeb3) {
-            throw new Error('SolanaWeb3 library failed to load. Please refresh the page or check your internet connection.');
+            console.error('SolanaWeb3 not loaded. Local file path: /lib/index.iife.min.js');
+            throw new Error('SolanaWeb3 library failed to load. Please ensure the local library is correctly included.');
         }
 
         const { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } = window.SolanaWeb3;
@@ -363,8 +363,10 @@ validateStorage();
 renderTransactions();
 
 // Log SolanaWeb3 availability for debugging
-if (typeof window.SolanaWeb3 === 'undefined') {
-    console.error('SolanaWeb3 is not defined. Check script tag in index.html or CDN availability.');
-} else {
-    console.log('SolanaWeb3 loaded successfully:', window.SolanaWeb3);
-}
+window.addEventListener('load', () => {
+    if (typeof window.SolanaWeb3 === 'undefined') {
+        console.error('SolanaWeb3 is not defined. Check local file: /lib/index.iife.min.js');
+    } else {
+        console.log('SolanaWeb3 loaded successfully:', window.SolanaWeb3);
+    }
+});
