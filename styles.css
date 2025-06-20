@@ -1,16 +1,17 @@
 /* Basic Reset */
-* {
+* { /* Line 1 */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-body {
+} /* Line 4 */
+body { /* Line 5 */
     font-family: 'Comic Sans MS', 'Bubblegum Sans', sans-serif;
     background-color: #121212;
     color: #F5F5F5;
-}
+} /* Line 8 */
+
 /* Fixed Scrolling Images */
-.boozer-mascot {
+.boozer-mascot { /* Line 10 */
     position: fixed;
     top: 20px;
     left: 20px;
@@ -22,8 +23,8 @@ body {
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
     z-index: 1000;
     transition: none;
-}
-.boozer-logo-container {
+} /* Line 20 */
+.boozer-logo-container { /* Line 21 */
     position: fixed;
     top: 20px;
     right: 20px;
@@ -31,8 +32,8 @@ body {
     flex-direction: column;
     align-items: center;
     z-index: 1000;
-}
-.boozer-logo {
+} /* Line 27 */
+.boozer-logo { /* Line 28 */
     width: 100px;
     height: 100px;
     object-fit: contain;
@@ -40,8 +41,8 @@ body {
     border: 2px solid #FF4081;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
     transition: none;
-}
-.booz-it-up {
+} /* Line 35 */
+.booz-it-up { /* Line 36 */
     margin-top: 5px;
     font-size: 16px;
     font-weight: bold;
@@ -51,16 +52,17 @@ body {
     -webkit-text-fill-color: transparent;
     text-shadow: 0 0 5px rgba(255, 64, 129, 0.5);
     text-align: center;
-}
+} /* Line 44 */
+
 /* Banner Section */
-.banner {
+.banner { /* Line 46 */
     position: relative;
     width: 100%;
     padding-bottom: 60.49%;
     height: 0;
     overflow: hidden;
-}
-.banner img {
+} /* Line 52 */
+.banner img { /* Line 53 */
     position: absolute;
     top: 0;
     left: 0;
@@ -68,14 +70,15 @@ body {
     height: 100%;
     object-fit: cover;
     transition: none;
-}
+} /* Line 60 */
+
 /* Buttons Below Banner */
-.banner-buttons {
+.banner-buttons { /* Line 62 */
     text-align: center;
     padding: 10px 0;
     background-color: #FFB300;
-}
-.banner-buttons a {
+} /* Line 66 */
+.banner-buttons a { /* Line 67 */
     display: inline-block;
     margin: 0 10px;
     padding: 10px 20px;
@@ -85,64 +88,65 @@ body {
     font-size: 18px;
     border-radius: 5px;
     transition: transform 0.3s;
-}
-.banner-buttons a:hover {
+} /* Line 77 */
+.banner-buttons a:hover { /* Line 78 */
     transform: scale(1.1);
-}
+} /* Line 80 */
+
 /* Auto Presale Section */
-.presale {
+.presale { /* Line 82 */
     padding: 40px 20px;
     text-align: center;
     background-color: #121212;
     display: flex;
     justify-content: center;
-}
-.presale-card {
+} /* Line 88 */
+.presale-card { /* Line 89 */
     background: linear-gradient(135deg, #1A0033, #3E0047);
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     max-width: 600px;
     width: 100%;
-}
-.presale h2 {
+} /* Line 96 */
+.presale h2 { /* Line 97 */
     color: #FFB300;
     font-size: 36px;
     margin-bottom: 20px;
-}
-.presale p {
+} /* Line 100 */
+.presale p { /* Line 101 */
     font-size: 18px;
     margin-bottom: 10px;
-}
-.presale .timer {
+} /* Line 104 */
+.presale .timer { /* Line 105 */
     font-size: 24px;
     color: #FF4081;
     margin-bottom: 20px;
-}
-.presale .price-info {
+} /* Line 108 */
+.presale .price-info { /* Line 109 */
     font-size: 20px;
     color: #FFB300;
     margin-bottom: 10px;
-}
-.presale .price-note {
+} /* Line 112 */
+.presale .price-note { /* Line 113 */
     font-size: 16px;
     color: #CFD8DC;
     margin-bottom: 20px;
-}
-.presale .progress-bar {
+} /* Line 116 */
+.presale .progress-bar { /* Line 117 */
     width: 100%;
     background-color: #333;
     border-radius: 5px;
     margin-bottom: 20px;
     overflow: hidden;
-}
-.presale .progress {
+} /* Line 122 */
+.presale .progress { /* Line 123 */
     height: 10px;
     background-image: linear-gradient(to right, #4A148C, #FF4081);
     width: 0%;
     transition: width 1s ease;
-}
-.presale input[type="number"] {
+} /* Line 128 */
+.presale input[type="number"] { /* Line 129 */
     padding: 10px;
     font-size: 16px;
     margin-bottom: 10px;
@@ -151,20 +155,20 @@ body {
     border: none;
     background-color: #F5F5F5;
     color: #121212;
-}
-.presale .result-boxes {
+} /* Line 137 */
+.presale .result-boxes { /* Line 138 */
     display: flex;
     justify-content: space-around;
     margin-bottom: 20px;
-}
-.presale .result-box {
+} /* Line 141 */
+.presale .result-box { /* Line 142 */
     background-color: #2A003D;
     padding: 10px;
     border-radius: 5px;
     width: 45%;
     font-size: 16px;
-}
-.presale button {
+} /* Line 147 */
+.presale button { /* Line 148 */
     padding: 10px 20px;
     background-image: linear-gradient(to right, #4A148C, #FF4081);
     color: #F5F5F5;
@@ -174,81 +178,91 @@ body {
     cursor: pointer;
     transition: transform 0.3s;
     margin: 5px;
-}
-.presale button:hover {
+} /* Line 157 */
+.presale button:hover { /* Line 158 */
     transform: scale(1.1);
-}
-.presale button:disabled {
+} /* Line 160 */
+.presale button:disabled { /* Line 161 */
     background: #666;
     cursor: not-allowed;
     transform: none;
-}
-.presale .wallet-info {
+} /* Line 164 */
+.presale .wallet-info { /* Line 165 */
     margin-top: 20px;
     font-size: 16px;
     color: #CFD8DC;
     word-break: break-all;
-}
-.presale .wallet-info a {
+} /* Line 169 */
+.presale .wallet-info a { /* Line 170 */
     color: #FF4081;
     text-decoration: none;
-}
-.presale .wallet-info a:hover {
+} /* Line 173 */
+.presale .wallet-info a:hover { /* Line 174 */
     text-decoration: underline;
-}
-.presale .verification-notice {
+} /* Line 176 */
+.presale .verification-notice { /* Line 177 */
     margin-top: 20px;
     font-size: 16px;
     color: #FFB300;
-}
-.presale .verification-notice a {
+} /* Line 180 */
+.presale .verification-notice a { /* Line 181 */
     color: #FF4081;
     text-decoration: none;
-}
-.presale .verification-notice a:hover {
+} /* Line 184 */
+.presale .verification-notice a:hover { /* Line 185 */
     text-decoration: underline;
-}
-.presale .airdrop-info {
+} /* Line 187 */
+.presale .airdrop-info { /* Line 188 */
     margin-top: 20px;
     font-size: 16px;
     color: #FFB300;
-}
-.presale .airdrop-info a {
+} /* Line 191 */
+.presale .airdrop-info a { /* Line 192 */
     color: #FF4081;
     text-decoration: none;
-}
-.presale .airdrop-info a:hover {
+} /* Line 195 */
+.presale .airdrop-info a:hover { /* Line 196 */
     text-decoration: underline;
-}
-.transaction-history {
+} /* Line 198 */
+.transaction-history { /* Line 199 */
     margin-top: 30px;
     padding: 20px;
     background: linear-gradient(135deg, #1A0033, #3E0047);
     border-radius: 10px;
-}
-.transaction-history h3 {
+} /* Line 203 */
+.transaction-history h3 { /* Line 204 */
     color: #FFB300;
     font-size: 24px;
     margin-bottom: 15px;
-}
-.transaction-history ul {
+} /* Line 207 */
+.transaction-history ul { /* Line 208 */
     list-style: none;
     padding: 0;
-}
-.transaction-history li {
+} /* Line 211 */
+.transaction-history li { /* Line 212 */
     font-size: 16px;
     margin-bottom: 10px;
     color: #F5F5F5;
-}
+} /* Line 215 */
+.transaction-history li a { /* Line 216 */
+    color: #FF4081;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.3s;
+} /* Line 220 */
+.transaction-history li a:hover { /* Line 221 */
+    color: #FFB300;
+} /* Line 223 */
+
 /* About Boozer Section */
-.about-boozer {
+.about-boozer { /* Line 225 */
     padding: 40px 20px;
     text-align: center;
     background-color: #121212;
     display: flex;
     justify-content: center;
-}
-.about-card {
+} /* Line 231 */
+.about-card { /* Line 232 */
     background: linear-gradient(135deg, #1A0033, #3E0047);
     padding: 30px;
     border-radius: 15px;
@@ -259,14 +273,14 @@ body {
     align-items: flex-start;
     gap: 20px;
     min-height: 650px;
-}
-.about-card .image-container {
+} /* Line 242 */
+.about-card .image-container { /* Line 243 */
     width: 300px;
     height: 300px;
     flex-shrink: 0;
     background-color: #2A003D;
-}
-.about-card img {
+} /* Line 248 */
+.about-card img { /* Line 249 */
     width: 300px;
     height: 300px;
     object-fit: contain;
@@ -276,20 +290,20 @@ body {
     transition: none;
     will-change: transform;
     display: block;
-}
-.about-card .games-preview {
+} /* Line 258 */
+.about-card .games-preview { /* Line 259 */
     margin-top: 20px;
     text-align: center;
     min-height: 220px;
-}
-.about-card .games-preview .image-container {
+} /* Line 263 */
+.about-card .games-preview .image-container { /* Line 264 */
     width: 300px;
     height: 200px;
     flex-shrink: 0;
     background-color: #2A003D;
     margin: 0 auto;
-}
-.about-card .games-preview img {
+} /* Line 270 */
+.about-card .games-preview img { /* Line 271 */
     width: 300px;
     height: 200px;
     object-fit: contain;
@@ -299,58 +313,59 @@ body {
     transition: none;
     will-change: transform;
     display: block;
-}
-.about-card .content {
+} /* Line 280 */
+.about-card .content { /* Line 281 */
     text-align: left;
     flex: 1;
-}
-.about-card h2 {
+} /* Line 284 */
+.about-card h2 { /* Line 285 */
     color: #FFB300;
     font-size: 36px;
     margin-bottom: 10px;
-}
-.about-card p {
+} /* Line 288 */
+.about-card p { /* Line 289 */
     font-size: 16px;
     color: #F5F5F5;
-}
-.about-card .funny-line {
+} /* Line 292 */
+.about-card .funny-line { /* Line 293 */
     font-size: 16px;
     color: #FFB300;
     margin-bottom: 5px;
-}
+} /* Line 296 */
+
 /* Tokenomics Section */
-.tokenomics {
+.tokenomics { /* Line 298 */
     padding: 40px 20px;
     text-align: center;
     background-color: #121212;
     display: flex;
     justify-content: center;
-}
-.tokenomics-card {
+} /* Line 304 */
+.tokenomics-card { /* Line 305 */
     background: linear-gradient(135deg, #1A0033, #3E0047);
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     max-width: 800px;
     width: 100%;
-}
-.tokenomics-card h2 {
+} /* Line 312 */
+.tokenomics-card h2 { /* Line 313 */
     color: #FFB300;
     font-size: 36px;
     margin-bottom: 10px;
-}
-.tokenomics-card .intro {
+} /* Line 316 */
+.tokenomics-card .intro { /* Line 317 */
     font-size: 18px;
     color: #FF4081;
     margin-bottom: 20px;
-}
-.tokenomics-chart {
+} /* Line 320 */
+.tokenomics-chart { /* Line 321 */
     display: flex;
     justify-content: space-around;
     margin-bottom: 30px;
     gap: 10px;
-}
-.tokenomics-bar {
+} /* Line 325 */
+.tokenomics-bar { /* Line 326 */
     flex: 1;
     height: 150px;
     background-image: linear-gradient(to top, #4A148C, #FF4081);
@@ -362,63 +377,64 @@ body {
     padding-bottom: 10px;
     font-size: 14px;
     color: #F5F5F5;
-}
-.tokenomics-bar span {
+} /* Line 335 */
+.tokenomics-bar span { /* Line 336 */
     position: absolute;
     top: -20px;
     color: #FFB300;
     font-size: 16px;
-}
-.tokenomics-list {
+} /* Line 340 */
+.tokenomics-list { /* Line 341 */
     text-align: left;
     font-size: 16px;
-}
-.tokenomics-list ul {
+} /* Line 344 */
+.tokenomics-list ul { /* Line 345 */
     list-style: none;
     padding: 0;
-}
-.tokenomics-list li {
+} /* Line 348 */
+.tokenomics-list li { /* Line 349 */
     margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #4A148C;
     padding-bottom: 5px;
-}
-.tokenomics-list li span:first-child {
+} /* Line 354 */
+.tokenomics-list li span:first-child { /* Line 355 */
     color: #FF4081;
-}
+} /* Line 357 */
+
 /* Roadmap Section */
-.roadmap {
+.roadmap { /* Line 359 */
     padding: 40px 20px;
     text-align: center;
     background-color: #121212;
     display: flex;
     justify-content: center;
-}
-.roadmap-card {
+} /* Line 365 */
+.roadmap-card { /* Line 366 */
     background: linear-gradient(135deg, #1A0033, #3E0047);
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     max-width: 800px;
     width: 100%;
-}
-.roadmap-card h2 {
+} /* Line 373 */
+.roadmap-card h2 { /* Line 374 */
     color: #FFB300;
     font-size: 36px;
     margin-bottom: 10px;
-}
-.roadmap-card .intro {
+} /* Line 377 */
+.roadmap-card .intro { /* Line 378 */
     font-size: 18px;
     color: #FF4081;
     margin-bottom: 20px;
-}
-.timeline {
+} /* Line 381 */
+.timeline { /* Line 382 */
     position: relative;
     margin: 0 auto;
     padding: 20px 0;
-}
-.timeline::before {
+} /* Line 386 */
+.timeline::before { /* Line 387 */
     content: '';
     position: absolute;
     left: 50%;
@@ -427,22 +443,22 @@ body {
     width: 4px;
     background-image: linear-gradient(to bottom, #4A148C, #FF4081);
     transform: translateX(-50%);
-}
-.timeline-item {
+} /* Line 395 */
+.timeline-item { /* Line 396 */
     position: relative;
     width: 50%;
     padding: 20px;
     box-sizing: border-box;
-}
-.timeline-item:nth-child(odd) {
+} /* Line 401 */
+.timeline-item:nth-child(odd) { /* Line 402 */
     left: 0;
     text-align: right;
-}
-.timeline-item:nth-child(even) {
+} /* Line 405 */
+.timeline-item:nth-child(even) { /* Line 406 */
     left: 50%;
     text-align: left;
-}
-.timeline-item::before {
+} /* Line 409 */
+.timeline-item::before { /* Line 410 */
     content: '';
     position: absolute;
     top: 25px;
@@ -451,61 +467,62 @@ body {
     background-color: #FFB300;
     border-radius: 50%;
     border: 2px solid #FF4081;
-}
-.timeline-item:nth-child(odd)::before {
+} /* Line 418 */
+.timeline-item:nth-child(odd)::before { /* Line 419 */
     right: -8px;
-}
-.timeline-item:nth-child(even)::before {
+} /* Line 421 */
+.timeline-item:nth-child(even)::before { /* Line 422 */
     left: -8px;
-}
-.timeline-content {
+} /* Line 424 */
+.timeline-content { /* Line 425 */
     background-color: #2A003D;
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-}
-.timeline-content h3 {
+} /* Line 430 */
+.timeline-content h3 { /* Line 431 */
     color: #FF4081;
     font-size: 20px;
     margin-bottom: 5px;
-}
-.timeline-content p {
+} /* Line 434 */
+.timeline-content p { /* Line 435 */
     font-size: 16px;
     color: #F5F5F5;
-}
+} /* Line 438 */
+
 /* Socials Section */
-.socials {
+.socials { /* Line 440 */
     padding: 40px 20px;
     text-align: center;
     background-color: #121212;
     display: flex;
     justify-content: center;
-}
-.socials-card {
+} /* Line 446 */
+.socials-card { /* Line 447 */
     background: linear-gradient(135deg, #1A0033, #3E0047);
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     max-width: 800px;
     width: 100%;
-}
-.socials-card h2 {
+} /* Line 454 */
+.socials-card h2 { /* Line 455 */
     color: #FFB300;
     font-size: 36px;
     margin-bottom: 10px;
-}
-.socials-card .intro {
+} /* Line 458 */
+.socials-card .intro { /* Line 459 */
     font-size: 18px;
     color: #FF4081;
     margin-bottom: 20px;
-}
-.socials-links {
+} /* Line 462 */
+.socials-links { /* Line 463 */
     display: flex;
     justify-content: center;
     gap: 20px;
     flex-wrap: wrap;
-}
-.socials-links a {
+} /* Line 467 */
+.socials-links a { /* Line 468 */
     display: inline-block;
     padding: 10px 20px;
     background-image: linear-gradient(to right, #4A148C, #FF4081);
@@ -514,147 +531,149 @@ body {
     font-size: 16px;
     border-radius: 5px;
     transition: transform 0.3s;
-}
-.socials-links a:hover {
+} /* Line 477 */
+.socials-links a:hover { /* Line 478 */
     transform: scale(1.1);
-}
+} /* Line 480 */
+
 /* Disclaimer Section */
-.disclaimer {
+.disclaimer { /* Line 482 */
     padding: 40px 20px;
     text-align: center;
     background-color: #121212;
     display: flex;
     justify-content: center;
-}
-.disclaimer-card {
+} /* Line 488 */
+.disclaimer-card { /* Line 489 */
     background: linear-gradient(135deg, #1A0033, #3E0047);
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     max-width: 800px;
     width: 100%;
-}
-.disclaimer-card h2 {
+} /* Line 496 */
+.disclaimer-card h2 { /* Line 497 */
     color: #FFB300;
     font-size: 36px;
     margin-bottom: 10px;
-}
-.disclaimer-card p {
+} /* Line 500 */
+.disclaimer-card p { /* Line 501 */
     font-size: 16px;
     color: #F5F5F5;
-}
+} /* Line 504 */
+
 /* Responsive Design */
-@media (max-width: 768px) {
-    .boozer-mascot {
+@media (max-width: 768px) { /* Line 506 */
+    .boozer-mascot { /* Line 507 */
         width: 70px;
         height: 70px;
         top: 10px;
         left: 10px;
-    }
-    .boozer-logo-container {
+    } /* Line 512 */
+    .boozer-logo-container { /* Line 513 */
         top: 10px;
         right: 10px;
-    }
-    .boozer-logo {
+    } /* Line 516 */
+    .boozer-logo { /* Line 517 */
         width: 70px;
         height: 70px;
-    }
-    .booz-it-up {
+    } /* Line 520 */
+    .booz-it-up { /* Line 521 */
         font-size: 12px;
-    }
-    .banner-buttons a {
+    } /* Line 523 */
+    .banner-buttons a { /* Line 524 */
         display: block;
         margin: 10px auto;
         width: 80%;
-    }
-    .presale h2, .about-card h2, .tokenomics-card h2, .roadmap-card h2, .socials-card h2, .disclaimer-card h2 {
+    } /* Line 529 */
+    .presale h2, .about-card h2, .tokenomics-card h2, .roadmap-card h2, .socials-card h2, .disclaimer-card h2 { /* Line 530 */
         font-size: 28px;
-    }
-    .presale .timer, .presale .price-info {
+    } /* Line 532 */
+    .presale .timer, .presale .price-info { /* Line 533 */
         font-size: 20px;
-    }
-    .presale input[type="number"] {
+    } /* Line 535 */
+    .presale input[type="number"] { /* Line 536 */
         width: 100%;
-    }
-    .presale .result-boxes {
+    } /* Line 539 */
+    .presale .result-boxes { /* Line 540 */
         flex-direction: column;
         gap: 10px;
-    }
-    .presale .result-box {
+    } /* Line 543 */
+    .presale .result-box { /* Line 544 */
         width: 100%;
-    }
-    .about-card {
+    } /* Line 546 */
+    .about-card { /* Line 547 */
         flex-direction: column;
         text-align: center;
         min-height: 750px;
-    }
-    .about-card .image-container {
+    } /* Line 551 */
+    .about-card .image-container { /* Line 552 */
         width: 200px;
         height: 200px;
         margin: 0 auto;
-    }
-    .about-card img {
+    } /* Line 557 */
+    .about-card img { /* Line 558 */
         width: 200px;
         height: 200px;
-    }
-    .about-card .games-preview {
+    } /* Line 561 */
+    .about-card .games-preview { /* Line 562 */
         min-height: 200px;
-    }
-    .about-card .games-preview .image-container {
+    } /* Line 564 */
+    .about-card .games-preview .image-container { /* Line 565 */
         width: 200px;
         height: 133.33px;
-    }
-    .about-card .games-preview img {
+    } /* Line 569 */
+    .about-card .games-preview img { /* Line 570 */
         width: 200px;
         height: 133.33px;
-    }
-    .about-card .content {
+    } /* Line 573 */
+    .about-card .content { /* Line 574 */
         text-align: center;
-    }
-    .tokenomics-chart {
+    } /* Line 576 */
+    .tokenomics-chart { /* Line 577 */
         flex-direction: column;
         gap: 20px;
-    }
-    .tokenomics-bar {
+    } /* Line 580 */
+    .tokenomics-bar { /* Line 581 */
         width: 100%;
         height: 50px;
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
         padding-left: 10px;
-    }
-    .tokenomics-bar span {
+    } /* Line 588 */
+    .tokenomics-bar span { /* Line 589 */
         position: static;
         margin-right: 10px;
-    }
-    .timeline::before {
+    } /* Line 592 */
+    .timeline::before { /* Line 593 */
         left: 20px;
-    }
-    .timeline-item {
+    } /* Line 595 */
+    .timeline-item { /* Line 596 */
         width: 100%;
         left: 0 !important;
         text-align: left !important;
         padding-left: 50px;
         padding-right: 20px;
-    }
-    .timeline-item::before {
+    } /* Line 602 */
+    .timeline-item::before { /* Line 603 */
         left: 12px !important;
         right: auto !important;
-    }
-    .socials-links a {
+    } /* Line 606 */
+    .socials-links a { /* Line 607 */
         margin: 5px;
-    }
-}
-@media (max-width: 480px) {
-    .boozer-mascot {
+    } /* Line 609 */
+} /* Line 610 */
+@media (max-width: 480px) { /* Line 611 */
+    .boozer-mascot { /* Line 612 */
         width: 50px;
         height: 50px;
-    }
-    .boozer-logo {
+    } /* Line 615 */
+    .boozer-logo { /* Line 616 */
         width: 50px;
         height: 50px;
-    }
-    .booz-it-up {
+    } /* Line 619 */
+    .booz-it-up { /* Line 620 */
         font-size: 10px;
-    }
-}
+    } /* Line 622 */
+} /* Line 623 */
