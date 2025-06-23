@@ -230,6 +230,12 @@ body {
 .presale .airdrop-info a:hover {
     text-decoration: underline;
 }
+.presale .wallet-notice {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #ff4444; /* Red for urgency */
+    text-align: center;
+}
 .transaction-history {
     margin-top: 30px;
     padding: 20px;
@@ -260,6 +266,20 @@ body {
 }
 .transaction-history li a:hover {
     color: #FFB300;
+}
+#google-form-link {
+    display: none; /* Hidden by default, shown when popup is blocked */
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-image: linear-gradient(to right, #4A148C, #FF4081);
+    color: #F5F5F5;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: transform 0.3s;
+}
+#google-form-link:hover {
+    transform: scale(1.1);
 }
 
 /* About Boozer Section */
