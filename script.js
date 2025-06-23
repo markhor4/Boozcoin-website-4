@@ -444,38 +444,45 @@ async function buyBooz() {
         console.log('Generated Form URL with Transaction ID:', formUrl);
         googleFormLink.href = formUrl;
 
-        // Inject script to make fields non-editable except transactionId
+        // Popup and form handling
         setTimeout(() => {
-            const formWindow = window.open(formUrl, '_blank');
-            if (formWindow) {
-                formWindow.addEventListener('load', () => {
-                    const fieldsToLock = [
-                        formWindow.document.querySelector(`input[name="${FIELDS.walletAddress}"]`),
-                        formWindow.document.querySelector(`input[name="${FIELDS.solAmount}"]`),
-                        formWindow.document.querySelector(`input[name="${FIELDS.boozAmount}"]`)
-                    ];
-                    fieldsToLock.forEach(field => {
-                        if (field) {
-                            field.setAttribute('readonly', 'true');
-                            field.setAttribute('disabled', 'true'); // Enforce non-editable
-                            field.style.backgroundColor = '#f0f0f0'; // Gray background
-                            field.style.cursor = 'not-allowed'; // Visual cue
-                        }
-                    });
-                    // Ensure transactionId field remains editable
-                    const txField = formWindow.document.querySelector(`input[name="${FIELDS.transactionId}"]`);
-                    if (txField) {
-                        txField.removeAttribute('readonly');
-                        txField.removeAttribute('disabled');
-                        txField.style.backgroundColor = ''; // Reset to default
-                        txField.style.cursor = 'text'; // Reset to default
-                    }
-                });
-                formWindow.focus();
-                alert('Transaction successful! Form opened. ' + (webAppSuccess ? 'Data recorded internally.' : 'Failed to log data to internal sheet.'));
-            }
+          const formWindow = window.open(formUrl, '_blank');
+          if (!formWindow || formWindow.closed || typeof formWindow.closed === 'undefined') {
+            alert('Popup blocked! Please allow popups for this site (' + window.location.hostname + ') and retry the transaction. Check your browser settings or click the link below to open the form manually.');
+            console.warn('Popup blocked for form URL:', formUrl);
             loadingIndicator.style.display = 'none'; // Hide loading indicator
-        }, 2000); // Increased delay to 2000ms
+            googleFormLink.href = formUrl; // Provide manual link
+            googleFormLink.removeAttribute('disabled'); // Enable manual link
+            googleFormLink.textContent = 'Open Form Manually'; // Update link text
+            googleFormLink.style.display = 'block'; // Ensure link is visible
+          } else {
+            formWindow.addEventListener('load', () => {
+              const fieldsToLock = [
+                formWindow.document.querySelector(`input[name="${FIELDS.walletAddress}"]`),
+                formWindow.document.querySelector(`input[name="${FIELDS.solAmount}"]`),
+                formWindow.document.querySelector(`input[name="${FIELDS.boozAmount}"]`)
+              ];
+              fieldsToLock.forEach(field => {
+                if (field) {
+                  field.setAttribute('readonly', 'true');
+                  field.setAttribute('disabled', 'true');
+                  field.style.backgroundColor = '#f0f0f0';
+                  field.style.cursor = 'not-allowed';
+                }
+              });
+              const txField = formWindow.document.querySelector(`input[name="${FIELDS.transactionId}"]`);
+              if (txField) {
+                txField.removeAttribute('readonly');
+                txField.removeAttribute('disabled');
+                txField.style.backgroundColor = '';
+                txField.style.cursor = 'text';
+              }
+            });
+            formWindow.focus();
+            alert('Transaction successful! Form opened. ' + (webAppSuccess ? 'Data recorded internally.' : 'Failed to log data to internal sheet.'));
+            loadingIndicator.style.display = 'none'; // Hide loading indicator
+          }
+        }, 5000); // Increased to 5000ms for stability
     } catch (error) {
         console.error('Transaction error:', error);
         alert(`Error: ${error.message || 'Transaction failed.'}`);
