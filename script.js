@@ -313,155 +313,128 @@ async function connectWallet() {
 }
 
 async function buyBooz() {
-    const solAmount = parseFloat(solAmountInput.value) || 0;
-    console.log('User Input SOL Amount:', solAmount);
-    if (solAmount < 0.05 || solAmount > 5 || isNaN(solAmount)) {
-        alert('Enter a valid SOL amount (0.05–5 SOL).');
-        return;
-    }
-
-    const now = new Date();
-    if (now < PRE_SALE_START) {
-        alert('Presale starts on June 20, 2025.');
-        return;
-    }
-
-    const { price, round } = getCurrentPrice();
-    if (round === 'Ended') {
-        alert('Presale has ended!');
-        return;
-    }
-
-    if (solPriceInUSD === 0) {
-        alert('SOL price unavailable. Try again later.');
-        return;
-    }
-
-    if (!wallet || !wallet.publicKey) {
-        alert('Please connect your wallet first.');
-        return;
-    }
-
-    const usdAmount = Number((solAmount * solPriceInUSD).toFixed(8));
-    let boozAmount = Math.floor(Number((usdAmount / price).toFixed(8)));
-    const remainingTokens = TOTAL_TOKENS - tokensSold;
-    if (boozAmount > remainingTokens) {
-        alert(`Only ${remainingTokens.toLocaleString()} BOOZ left.`);
-        return;
-    }
-
-    try {
-        buyButton.disabled = true;
-        buyButton.textContent = 'Processing...';
-        loadingIndicator.style.display = 'block';
-
-        const solanaWeb3 = await waitForSolanaWeb3();
-        const { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } = solanaWeb3;
-        const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
-        const recipientPubkey = new PublicKey(RECIPIENT);
-        const lamports = Math.floor(solAmount * LAMPORTS_PER_SOL);
-
-        const transaction = new Transaction().add(
-            SystemProgram.transfer({
-                fromPubkey: wallet.publicKey,
-                toPubkey: recipientPubkey,
-                lamports
-            })
-        );
-
-        const { blockhash } = await connection.getLatestBlockhash();
-        transaction.recentBlockhash = blockhash;
-        transaction.feePayer = wallet.publicKey;
-
-        const signedTransaction = await wallet.signTransaction(transaction);
-        const signature = await connection.sendRawTransaction(signedTransaction.serialize());
-        console.log('Transaction sent, signature:', signature);
-
-        const confirmation = await connection.confirmTransaction(signature, 'processed', 60000);
-        if (confirmation?.err) {
-            throw new Error(`Transaction failed: ${JSON.stringify(confirmation.err)}`);
-        }
-        console.log('Transaction confirmed, signature:', signature);
-
-        tokensSold += boozAmount;
-        addTransaction(signature, solAmount, boozAmount);
-        updatePriceDisplay();
-
-        // Log to web app immediately
-        const webAppUrl = 'https://script.google.com/macros/s/AKfycbxdsGIktUX4pOnHtEXKdNTDtyuTIoQqc8Z34iXpmmw2KRxudH6wD-pETXf_tWFhiKOgGA/exec';
-
-async function sendToWebApp(walletAddress, solAmount, boozAmount, transactionId) {
-  const data = {
-    walletAddress,
-    solAmount,
-    boozAmount,
-    transactionId
-  };
-  try {
-    const response = await fetch(webAppUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-    const result = await response.json(); // Change from text() to json()
-    console.log('Web app response:', result);
-    if (!response.ok) throw new Error(result.message || 'Network response was not ok');
-    // Update UI or local state based on result if needed
-  } catch (error) {
-    console.error('Error sending to web app:', error);
+  const solAmount = parseFloat(solAmountInput.value) || 0;
+  console.log('User Input SOL Amount:', solAmount);
+  if (solAmount < 0.05 || solAmount > 5 || isNaN(solAmount)) {
+      alert('Enter a valid SOL amount (0.05–5 SOL).');
+      return;
   }
-}
 
-        // Generate and offer form URL
-        const formUrl = generatePreFilledFormUrl(wallet.publicKey.toString(), solAmount, boozAmount, signature);
-        googleFormLink.href = formUrl;
-        googleFormLink.style.display = 'block'; // Show manual link immediately
+  const now = new Date();
+  if (now < PRE_SALE_START) {
+      alert('Presale starts on June 20, 2025.');
+      return;
+  }
 
-        // Attempt to open form with popup check
-        setTimeout(() => {
-            const formWindow = window.open(formUrl, '_blank');
-            if (!formWindow || formWindow.closed || typeof formWindow.closed === 'undefined') {
-                alert('Popup blocked! Data logged internally. Click "Open Form Manually" to submit the form or allow popups and retry if needed.');
-                console.warn('Popup blocked for form URL:', formUrl);
-            } else {
-                formWindow.addEventListener('load', () => {
-                    const fieldsToLock = [
-                        formWindow.document.querySelector(`input[name="${FIELDS.walletAddress}"]`),
-                        formWindow.document.querySelector(`input[name="${FIELDS.solAmount}"]`),
-                        formWindow.document.querySelector(`input[name="${FIELDS.boozAmount}"]`)
-                    ];
-                    fieldsToLock.forEach(field => {
-                        if (field) {
-                            field.setAttribute('readonly', 'true');
-                            field.setAttribute('disabled', 'true');
-                            field.style.backgroundColor = '#f0f0f0';
-                            field.style.cursor = 'not-allowed';
-                        }
-                    });
-                    const txField = formWindow.document.querySelector(`input[name="${FIELDS.transactionId}"]`);
-                    if (txField) {
-                        txField.removeAttribute('readonly');
-                        txField.removeAttribute('disabled');
-                        txField.style.backgroundColor = '';
-                        txField.style.cursor = 'text';
-                    }
-                });
-                formWindow.focus();
-                alert('Transaction successful! Form opened. ' + (webAppSuccess ? 'Data recorded internally.' : 'Failed to log data to internal sheet.'));
-            }
-            loadingIndicator.style.display = 'none';
-        }, 5000);
+  const { price, round } = getCurrentPrice();
+  if (round === 'Ended') {
+      alert('Presale has ended!');
+      return;
+  }
 
-    } catch (error) {
-        console.error('Transaction error:', error);
-        alert(`Error: ${error.message || 'Transaction failed.'}`);
-        loadingIndicator.style.display = 'none';
-    } finally {
-        buyButton.disabled = PRE_SALE_START > new Date() || tokensSold >= TOTAL_TOKENS;
-        buyButton.textContent = 'Buy BOOZ Now';
-    }
+  if (solPriceInUSD === 0) {
+      alert('SOL price unavailable. Try again later.');
+      return;
+  }
+
+  if (!wallet || !wallet.publicKey) {
+      alert('Please connect your wallet first.');
+      return;
+  }
+
+  const usdAmount = Number((solAmount * solPriceInUSD).toFixed(8));
+  let boozAmount = Math.floor(Number((usdAmount / price).toFixed(8)));
+  const remainingTokens = TOTAL_TOKENS - tokensSold;
+  if (boozAmount > remainingTokens) {
+      alert(`Only ${remainingTokens.toLocaleString()} BOOZ left.`);
+      return;
+  }
+
+  try {
+      buyButton.disabled = true;
+      buyButton.textContent = 'Processing...';
+      loadingIndicator.style.display = 'block';
+
+      const solanaWeb3 = await waitForSolanaWeb3();
+      const { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } = solanaWeb3;
+      const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
+      const recipientPubkey = new PublicKey(RECIPIENT);
+      const lamports = Math.floor(solAmount * LAMPORTS_PER_SOL);
+
+      const transaction = new Transaction().add(
+          SystemProgram.transfer({
+              fromPubkey: wallet.publicKey,
+              toPubkey: recipientPubkey,
+              lamports
+          })
+      );
+
+      const { blockhash } = await connection.getLatestBlockhash();
+      transaction.recentBlockhash = blockhash;
+      transaction.feePayer = wallet.publicKey;
+
+      const signedTransaction = await wallet.signTransaction(transaction);
+      const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+      console.log('Transaction sent, signature:', signature);
+
+      const confirmation = await connection.confirmTransaction(signature, 'processed', 60000);
+      if (confirmation?.err) {
+          throw new Error(`Transaction failed: ${JSON.stringify(confirmation.err)}`);
+      }
+      console.log('Transaction confirmed, signature:', signature);
+
+      tokensSold += boozAmount;
+      addTransaction(signature, solAmount, boozAmount);
+      updatePriceDisplay();
+
+      // Send to web app
+      const webAppUrl = 'https://script.google.com/macros/s/AKfycbxdsGIktUX4pOnHtEXKdNTDtyuTIoQqc8Z34iXpmmw2KRxudH6wD-pETXf_tWFhiKOgGA/exec';
+      const transactionData = {
+          walletAddress: wallet.publicKey.toString(),
+          solAmount: solAmount,
+          boozAmount: boozAmount,
+          transactionId: signature
+      };
+      let webAppSuccess = false;
+      try {
+          const response = await fetch(webAppUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(transactionData)
+          });
+          const result = await response.json(); // Parse JSON response
+          console.log('Web app response:', result);
+          webAppSuccess = response.ok && result.status === 'success';
+      } catch (error) {
+          console.error('Error sending to web app:', error);
+      }
+
+      // Generate and offer form URL
+      const formUrl = generatePreFilledFormUrl(wallet.publicKey.toString(), solAmount, boozAmount, signature);
+      googleFormLink.href = formUrl;
+      googleFormLink.style.display = 'block';
+
+      // Attempt to open form with popup check and show alert based on webAppSuccess
+      setTimeout(() => {
+          const formWindow = window.open(formUrl, '_blank');
+          if (!formWindow || formWindow.closed || typeof formWindow.closed === 'undefined') {
+              alert('Popup blocked! Data logged internally. Click "Open Form Manually" to submit the form or allow popups and retry if needed.');
+              console.warn('Popup blocked for form URL:', formUrl);
+          } else {
+              formWindow.focus();
+          }
+          alert('Transaction successful! Form opened. ' + (webAppSuccess ? 'Data recorded internally.' : 'Failed to log data to internal sheet. Please try again or contact support.'));
+          loadingIndicator.style.display = 'none';
+      }, 5000);
+
+  } catch (error) {
+      console.error('Transaction error:', error);
+      alert(`Error: ${error.message || 'Transaction failed.'}`);
+      loadingIndicator.style.display = 'none';
+  } finally {
+      buyButton.disabled = PRE_SALE_START > new Date() || tokensSold >= TOTAL_TOKENS;
+      buyButton.textContent = 'Buy BOOZ Now';
+  }
 }
 
 // Event Listeners
