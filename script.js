@@ -388,7 +388,7 @@ async function buyBooz() {
         updatePriceDisplay();
 
         // Log to web app immediately
-        const webAppUrl = 'https://script.google.com/macros/s/AKfycbzMnIOrElphMLpH6sVvXNgwSdZTlCUrDshOvT05LrHYhkvVQFZyZ2fyD3CpnMY4UrJJ/exec';
+        const webAppUrl = 'https://script.google.com/macros/s/AKfycbxdsGIktUX4pOnHtEXKdNTDtyuTIoQqc8Z34iXpmmw2KRxudH6wD-pETXf_tWFhiKOgGA/exec';
         const transactionData = {
             walletAddress: wallet.publicKey.toString(),
             solAmount: solAmount,
