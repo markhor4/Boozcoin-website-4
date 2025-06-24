@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE=' https://cdn.jsdelivr.net https://cdn.jsdelivr.net/npm/@solana/web3.js@latest; connect-src 'self' https://api.coingecko.com https://pro-api.coinmarketcap.com ws://localhost:* http://localhost:* https://api.devnet.solana.com wss://api.devnet.solana.com https://script.google.com; style-src 'self' 'unsafe-inline'; img-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE=' https://cdn.jsdelivr.net https://cdn.jsdelivr.net/npm/@solana/web3.js@latest; connect-src 'self' https://api.coingecko.com https://pro-api.coinmarketcap.com ws://localhost:* http://localhost:* https://api.devnet.solana.com wss://api.devnet.solana.com; style-src 'self' 'unsafe-inline'; img-src 'self';">
     
     <title>Boozer (BoozCoin) - Solana Meme Coin</title>
     <link rel="stylesheet" href="styles.css">
@@ -63,6 +63,12 @@
             <div class="transaction-history">
                 <h3>Your Transactions</h3>
                 <ul id="transaction-list" aria-live="polite"></ul>
+            </div>
+
+            <!-- Popup Tutorial Tooltip -->
+            <div id="popup-tutorial" style="display: none; position: fixed; top: 10px; right: 10px; background: #fff; padding: 10px; border: 1px solid #ccc; z-index: 1000; font-size: 14px;">
+                <strong>Popup Help:</strong> Your browser blocked the form popup! Click "<a id="google-form-link" href="#" target="_blank">Open Form Manually</a>" to submit your transaction, or allow popups for this site in your browser settings (e.g., Chrome: Settings > Privacy and Security > Site Settings > Popups and redirects). 
+                <button onclick="this.parentElement.style.display='none'" style="margin-left: 10px;">Close</button>
             </div>
         </div>
     </section>
