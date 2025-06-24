@@ -25,7 +25,7 @@ const presaleTimer = document.getElementById('presale-timer');
 const transactionList = document.getElementById('transaction-list');
 const googleFormLink = document.getElementById('google-form-link');
 const loadingIndicator = document.getElementById('loading-indicator');
-const popupTutorial = document.getElementById('popup-tutorial'); // Tooltip for popup guidance
+const popupTutorial = document.getElementById('popup-tutorial');
 
 // State
 let wallet = null;
@@ -169,27 +169,14 @@ function getCurrentPrice() {
     if (tokensSold >= TOTAL_TOKENS) {
         return { price: 0, round: 'Ended' };
     }
-    const step = Math.floor(tokensSold / 5000000) + 1;
-    let price, round;
-    if (tokensSold < 100000000) {
-        price = 0.00003 + (step - 1) * 0.000002;
-        round = '🍺 Boozer Shot';
-    } else if (tokensSold < 200000000) {
-        price = 0.00004 + (step - 21) * 0.000002;
-        round = '🍻 Boozer Cheers';
-    } else {
-        price = 0.00005 + (step - 41) * 0.000002;
-        round = '🎉 Party Popper';
-    }
-    return { price, round };
+    const step = Math.floor(tokensSold / 1000000); // Increment every 1 million
+    const price = 0.00003 + (step * 0.000001); // Starting at 0.00003, +0.000001 per 1M
+    return { price, round: 'Booz Presale' };
 }
 
 function updatePriceDisplay() {
     const { price, round } = getCurrentPrice();
     const priceInfo = document.getElementById('price-info');
-    tokensSoldDisplay.textContent = tokensSold.toLocaleString();
-    const progressPercent = (tokensSold / TOTAL_TOKENS) * 100;
-    progressBar.style.width = `${progressPercent}%`;
     if (price === 0) {
         priceInfo.textContent = 'Presale Ended!';
     } else {
@@ -261,8 +248,10 @@ function addTransaction(signature, solAmount, boozAmount) {
     transactions.push({ signature, solAmount, boozAmount, timestamp });
     localStorage.setItem('boozTransactions', JSON.stringify(transactions));
     localStorage.setItem('boozTransactionsHash', sha256(JSON.stringify(transactions)));
+    tokensSold += boozAmount; // Increment tokensSold with each transaction
     renderTransactions();
     updateCalculations(solAmount);
+    updatePriceDisplay();
     console.log('Added transaction:', { signature, solAmount, boozAmount, timestamp });
 }
 
@@ -334,8 +323,8 @@ async function buyBooz() {
         return;
     }
 
-    const { price, round } = getCurrentPrice();
-    if (round === 'Ended') {
+    const { price } = getCurrentPrice();
+    if (price === 0) {
         alert('Presale has ended!');
         return;
     }
