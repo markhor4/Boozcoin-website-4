@@ -389,25 +389,30 @@ async function buyBooz() {
 
         // Log to web app immediately
         const webAppUrl = 'https://script.google.com/macros/s/AKfycbxdsGIktUX4pOnHtEXKdNTDtyuTIoQqc8Z34iXpmmw2KRxudH6wD-pETXf_tWFhiKOgGA/exec';
-        const transactionData = {
-            walletAddress: wallet.publicKey.toString(),
-            solAmount: solAmount,
-            boozAmount: boozAmount,
-            transactionId: signature
-        };
-        let webAppSuccess = false;
-        try {
-            const response = await fetch(webAppUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(transactionData)
-            });
-            const result = await response.text();
-            console.log('Web app response:', result);
-            webAppSuccess = response.ok;
-        } catch (error) {
-            console.error('Error sending to web app:', error);
-        }
+
+async function sendToWebApp(walletAddress, solAmount, boozAmount, transactionId) {
+  const data = {
+    walletAddress,
+    solAmount,
+    boozAmount,
+    transactionId
+  };
+  try {
+    const response = await fetch(webAppUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    const result = await response.json(); // Change from text() to json()
+    console.log('Web app response:', result);
+    if (!response.ok) throw new Error(result.message || 'Network response was not ok');
+    // Update UI or local state based on result if needed
+  } catch (error) {
+    console.error('Error sending to web app:', error);
+  }
+}
 
         // Generate and offer form URL
         const formUrl = generatePreFilledFormUrl(wallet.publicKey.toString(), solAmount, boozAmount, signature);
