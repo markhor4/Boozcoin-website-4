@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE=' https://cdn.jsdelivr.net https://cdn.jsdelivr.net/npm/@solana/web3.js@latest; connect-src 'self' https://api.coingecko.com https://pro-api.coinmarketcap.com ws://localhost:* http://localhost:* https://api.devnet.solana.com wss://api.devnet.solana.com; style-src 'self' 'unsafe-inline'; img-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vvt4KWwuNr51XfE5m+hzeNEGhiOfZzG97ccfqGsPwvE=' https://cdn.jsdelivr.net https://cdn.jsdelivr.net/npm/@solana/web3.js@latest; connect-src 'self' https://api.coingecko.com https://pro-api.coinmarketcap.com ws://localhost:* http://localhost:* https://api.mainnet-beta.solana.com wss://api.mainnet-beta.solana.com; style-src 'self' 'unsafe-inline'; img-src 'self';">
     
     <title>Boozer (BoozCoin) - Solana Meme Coin</title>
     <link rel="stylesheet" href="styles.css">
@@ -32,26 +32,33 @@
         <div class="presale-card">
             <h2>Auto Presale: Grab Your BOOZ! 🍺</h2>
             <p>Join the presale and get your share of 300M BOOZ tokens! Pay with SOL.</p>
-            <div class="timer" id="presale-timer" aria-live="polite">Presale Ongoing! Submit form after payment.</div>
-            <div class="price-info" id="price-info" aria-live="polite">Current Price: $0.00003 per BOOZ (Booz Presale)</div>
-            <div class="price-note">Prices increase gradually so Grab Your BOOZ early!</div>
+            <div class="timer" id="presale-timer" aria-live="polite">Presale Starts in: 9d 15h 24m 25s</div>
+            <div class="utc-time" id="utc-time">15:00 UTC, 05 July 2025</div>
+            <div class="price-info" id="price-info" aria-live="polite">Current Price: $0.00003 per BOOZ</div>
+            <div class="price-note">Instruction: Add minimum buy 0.05 and maximum buy 5 SOL</div>
+            <div class="verification-notice">Note: Payments are verified on-chain. After paying, submit your 'GOOGLE FORM' for BoozCoin allocation do not edit or add anything just submit.</div>
             <p>Current SOL Price: <span id="sol-price" aria-live="polite">Fetching...</span> USD</p>
-            <button id="connect-wallet" aria-label="Connect Solana wallet">Connect Wallet</button>
-            <input type="number" id="sol-amount" placeholder="Enter SOL amount" min="0.05" max="5" step="0.0001" value="0.05" aria-label="Enter SOL amount to buy BOOZ tokens">
-            <div class="result-boxes">
-                <div class="result-box">
-                    <p>You’ll get: <span id="booz-amount" aria-live="polite">0</span> BOOZ</p>
+            <div class="input-group">
+                <div class="input-item">
+                    <button id="connect-wallet" aria-label="Connect Solana wallet">Connect Wallet</button>
                 </div>
-                <div class="result-box">
-                    <p>Total Cost: <span id="usd-cost" aria-live="polite">0</span> USD</p>
+                <div class="input-item">
+                    <label>Enter SOL Amount</label>
+                    <input type="text" id="sol-amount" value="0.05" placeholder="Enter SOL" aria-label="Enter SOL value" class="input-field">
+                </div>
+                <div class="input-item">
+                    <label>BOOZ Quantity</label>
+                    <input type="text" id="booz-amount" value="250000" placeholder="Calculated BOOZ" aria-label="Calculated BOOZ quantity" class="input-field read-only">
+                </div>
+                <div class="input-item">
+                    <label>USD Cost</label>
+                    <input type="text" id="usd-cost" value="$7.50" placeholder="Calculated USD" aria-label="Calculated USD cost" class="input-field read-only">
                 </div>
             </div>
             <button id="buy-button" disabled aria-label="Buy BOOZ tokens now">Buy BOOZ Now</button>
             <!-- Optional Loading Indicator -->
             <div id="loading-indicator" style="display: none; text-align: center; color: #888;">Processing Transaction...</div>
             <p class="wallet-info">Presale Wallet: <a href="https://solscan.io/account/HY6po9XbgiZEztwbphc4Uo2q5SYAc5RFb1Axg5h8T7Vy" target="_blank">HY6po9XbgiZEztwbphc4Uo2q5SYAc5RFb1Axg5h8T7Vy</a></p>
-            <p class="verification-notice">Payments are verified on-chain. After paying, submit your Google Form below for BoozCoin allocation do not edit or add anything just submit.</p>
-            <p class="wallet-notice">Note: Ensure popups are allowed for this site to view your transaction form after purchase.</p>
             <p class="airdrop-info">Airdrop live now! Join on <a href="https://x.com/boozer_coin" target="_blank">X</a>.</p>
 
             <!-- Transaction History -->
@@ -60,10 +67,10 @@
                 <ul id="transaction-list" aria-live="polite"></ul>
             </div>
 
-            <!-- Popup Tutorial Tooltip -->
-            <div id="popup-tutorial" style="display: none; position: fixed; top: 10px; right: 10px; background: #fff; padding: 10px; border: 1px solid #ccc; z-index: 1000; font-size: 14px;">
-                <strong>Popup Help:</strong> Your browser blocked the form popup! Click "<a id="google-form-link" href="#" target="_blank">Open Form Manually</a>" to submit your transaction, or allow popups for this site in your browser settings (e.g., Chrome: Settings > Privacy and Security > Site Settings > Popups and redirects). 
-                <button onclick="this.parentElement.style.display='none'" style="margin-left: 10px;">Close</button>
+            <!-- Popup Tutorial -->
+            <div id="popup-tutorial" style="display: none; position: fixed; left: 50%; transform: translateX(-50%); top: 20px; background-color: #1A0033; padding: 15px; border: 2px solid; border-image: linear-gradient(to right, #4A148C, #FF4081) 1; z-index: 1000; font-size: 14px;">
+                <strong>Popup Help:</strong> Your browser blocked the form popup! Click "<a id="google-form-link" href="#" target="_blank" style="color: #FFB300; text-decoration: underline;">Open Form Manually</a>" to submit your transaction, or allow popups for this site in your browser settings (e.g., Chrome: Settings > Privacy and Security > Site Settings > Popups and redirects). 
+                <button id="close-popup" style="margin-left: 10px; padding: 5px 10px; background: #FF4081; color: #F5F5F5; border: none; border-radius: 5px; cursor: pointer;">Close</button>
             </div>
         </div>
     </section>
