@@ -8,24 +8,24 @@ const FIELDS = {
 };
 
 // Solana Pay configuration
-const RECIPIENT = '3j73rkUNf6cs4FpaPNse9Wkmvkf5a6RA47kNS5jfgy8D';
+const RECIPIENT = 'HY6po9XbgiZEztwbphc4Uo2q5SYAc5RFb1Axg5h8T7Vy';
 const TOTAL_TOKENS = 300000000;
-const PRE_SALE_START = new Date('2025-06-20T00:00:00Z');
+const PRE_SALE_START = new Date('2025-07-05T15:00:00Z');
 
 // DOM elements
 const connectWalletBtn = document.getElementById('connect-wallet');
 const buyButton = document.getElementById('buy-button');
 const solAmountInput = document.getElementById('sol-amount');
+const boozAmountInput = document.getElementById('booz-amount');
+const usdCostInput = document.getElementById('usd-cost');
 const solPriceSpan = document.getElementById('sol-price');
-const boozAmountDisplay = document.getElementById('booz-amount');
-const usdCostDisplay = document.getElementById('usd-cost');
-const tokensSoldDisplay = document.getElementById('tokens-sold');
-const progressBar = document.getElementById('progress-bar');
 const presaleTimer = document.getElementById('presale-timer');
+const utcTime = document.getElementById('utc-time');
 const transactionList = document.getElementById('transaction-list');
 const googleFormLink = document.getElementById('google-form-link');
 const loadingIndicator = document.getElementById('loading-indicator');
 const popupTutorial = document.getElementById('popup-tutorial');
+const closePopupBtn = document.getElementById('close-popup');
 
 // State
 let wallet = null;
@@ -157,31 +157,22 @@ async function fetchSolPrice() {
         console.error('CoinMarketCap failed:', error);
     }
     if (!cachedPrice) {
-        solPriceInUSD = 100;
-        solPriceSpan.textContent = `$100.00 (default)`;
-        console.warn('Using default SOL price of $100.');
+        solPriceInUSD = 150; // Default to a reasonable value
+        solPriceSpan.textContent = `$150.00 (default)`;
+        console.warn('Using default SOL price of $150.');
         updateCalculations();
     }
 }
 
 // Presale Logic
 function getCurrentPrice() {
-    if (tokensSold >= TOTAL_TOKENS) {
-        return { price: 0, round: 'Ended' };
-    }
-    const step = Math.floor(tokensSold / 1000000); // Increment every 1 million
-    const price = 0.00003 + (step * 0.000001); // Starting at 0.00003, +0.000001 per 1M
-    return { price, round: 'Booz Presale' };
+    return 0.00003; // Fixed price, manually adjustable
 }
 
 function updatePriceDisplay() {
-    const { price, round } = getCurrentPrice();
+    const price = getCurrentPrice();
     const priceInfo = document.getElementById('price-info');
-    if (price === 0) {
-        priceInfo.textContent = 'Presale Ended!';
-    } else {
-        priceInfo.textContent = `Current Price: $${price.toFixed(6)} per BOOZ (${round})`;
-    }
+    priceInfo.textContent = `Current Price: $${price.toFixed(6)} per BOOZ`;
 }
 
 function checkPresaleStatus() {
@@ -200,39 +191,27 @@ function checkPresaleStatus() {
     }
 }
 
-function updateCalculations(solAmount = parseFloat(solAmountInput.value) || 0) {
-    console.log('Updating calculations with SOL Amount:', solAmount);
-    boozAmountDisplay.parentElement.classList.add('loading');
-    usdCostDisplay.parentElement.classList.add('loading');
+function updateCalculations() {
+    const price = getCurrentPrice();
+    if (price === 0 || solPriceInUSD === 0) {
+        solAmountInput.value = '0.05';
+        boozAmountInput.value = '0';
+        usdCostInput.value = '$0';
+        return;
+    }
 
-    const { price } = getCurrentPrice();
-    if (price === 0) {
-        boozAmountDisplay.textContent = '0';
-        usdCostDisplay.textContent = '0';
-        boozAmountDisplay.parentElement.classList.remove('loading');
-        usdCostDisplay.parentElement.classList.remove('loading');
-        return;
+    let solAmount = parseFloat(solAmountInput.value) || 0;
+
+    // Restrict calculations to 0.05–5 SOL range
+    if (solAmount >= 0.05 && solAmount <= 5) {
+        const usdAmount = solAmount * solPriceInUSD;
+        const boozAmount = Math.floor(usdAmount / price);
+        boozAmountInput.value = boozAmount.toLocaleString();
+        usdCostInput.value = `$${usdAmount.toFixed(2)}`;
+    } else {
+        boozAmountInput.value = '0';
+        usdCostInput.value = '$0';
     }
-    if (solPriceInUSD === 0) {
-        boozAmountDisplay.textContent = 'Waiting for SOL price...';
-        usdCostDisplay.textContent = '$0';
-        boozAmountDisplay.parentElement.classList.remove('loading');
-        usdCostDisplay.parentElement.classList.remove('loading');
-        return;
-    }
-    const usdAmount = Number((solAmount * solPriceInUSD).toFixed(8));
-    let boozAmount = Math.floor(Number((usdAmount / price).toFixed(8)));
-    console.log('Calculated BOOZ Amount:', boozAmount);
-    const remainingTokens = TOTAL_TOKENS - tokensSold;
-    if (boozAmount > remainingTokens) {
-        boozAmount = remainingTokens;
-        console.log(`Capped BOOZ at ${boozAmount}.`);
-    }
-    boozAmountDisplay.textContent = boozAmount.toLocaleString();
-    usdCostDisplay.textContent = usdAmount.toFixed(2);
-    console.log('BOOZ Display updated to:', boozAmount.toLocaleString());
-    boozAmountDisplay.parentElement.classList.remove('loading');
-    usdCostDisplay.parentElement.classList.remove('loading');
 }
 
 function validateStorage() {
@@ -250,9 +229,8 @@ function addTransaction(signature, solAmount, boozAmount) {
     localStorage.setItem('boozTransactionsHash', sha256(JSON.stringify(transactions)));
     tokensSold += boozAmount; // Increment tokensSold with each transaction
     renderTransactions();
-    updateCalculations(solAmount);
+    updateCalculations(); // Update with current SOL value
     updatePriceDisplay();
-    console.log('Added transaction:', { signature, solAmount, boozAmount, timestamp });
 }
 
 function renderTransactions() {
@@ -260,7 +238,7 @@ function renderTransactions() {
     transactions.forEach(tx => {
         const li = document.createElement('li');
         const link = document.createElement('a');
-        link.href = `https://solscan.io/tx/${tx.signature}?cluster=devnet`;
+        link.href = `https://solscan.io/tx/${tx.signature}`;
         link.textContent = `TxID: ${tx.signature.slice(0, 8)}...`;
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
@@ -268,7 +246,6 @@ function renderTransactions() {
         li.appendChild(document.createTextNode(` | Sent ${tx.solAmount} SOL for ${tx.boozAmount.toLocaleString()} BOOZ on ${tx.timestamp}`));
         transactionList.appendChild(li);
     });
-    console.log('Rendered transactions:', transactions);
 }
 
 async function waitForSolanaWeb3(timeout = 10000) {
@@ -291,7 +268,6 @@ async function connectWallet() {
         wallet = window.solana;
         try {
             await wallet.disconnect();
-            console.log('Disconnected existing Phantom wallet');
         } catch (err) {
             console.warn('Failed to disconnect existing wallet:', err);
         }
@@ -313,17 +289,17 @@ async function buyBooz() {
     const solAmount = parseFloat(solAmountInput.value) || 0;
     console.log('User Input SOL Amount:', solAmount);
     if (solAmount < 0.05 || solAmount > 5 || isNaN(solAmount)) {
-        alert('Enter a valid SOL amount (0.05–5 SOL).');
+        alert('Enter a valid amount within 0.05–5 SOL range.');
         return;
     }
 
     const now = new Date();
     if (now < PRE_SALE_START) {
-        alert('Presale starts on June 20, 2025.');
+        alert('Presale starts on July 5, 2025 at 15:00 UTC.');
         return;
     }
 
-    const { price } = getCurrentPrice();
+    const price = getCurrentPrice();
     if (price === 0) {
         alert('Presale has ended!');
         return;
@@ -339,8 +315,8 @@ async function buyBooz() {
         return;
     }
 
-    const usdAmount = Number((solAmount * solPriceInUSD).toFixed(8));
-    let boozAmount = Math.floor(Number((usdAmount / price).toFixed(8)));
+    const usdAmount = solAmount * solPriceInUSD;
+    let boozAmount = Math.floor(usdAmount / price);
     const remainingTokens = TOTAL_TOKENS - tokensSold;
     if (boozAmount > remainingTokens) {
         alert(`Only ${remainingTokens.toLocaleString()} BOOZ left.`);
@@ -354,7 +330,7 @@ async function buyBooz() {
 
         const solanaWeb3 = await waitForSolanaWeb3();
         const { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } = solanaWeb3;
-        const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
+        const connection = new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
         const recipientPubkey = new PublicKey(RECIPIENT);
         const lamports = Math.floor(solAmount * LAMPORTS_PER_SOL);
 
@@ -384,7 +360,6 @@ async function buyBooz() {
         addTransaction(signature, solAmount, boozAmount);
         updatePriceDisplay();
 
-        // Generate and validate form URL
         const formUrl = generatePreFilledFormUrl(wallet.publicKey.toString(), solAmount, boozAmount, signature);
         if (formUrl === '#') {
             throw new Error('Form URL validation failed.');
@@ -392,12 +367,10 @@ async function buyBooz() {
         googleFormLink.href = formUrl;
         googleFormLink.style.display = 'block';
 
-        // Attempt to open form with popup check and show tutorial
         setTimeout(() => {
             const formWindow = window.open(formUrl, '_blank');
             if (!formWindow || formWindow.closed || typeof formWindow.closed === 'undefined') {
-                alert('Popup blocked! Please click "Open Form Manually" to submit your transaction details.');
-                popupTutorial.style.display = 'block'; // Show tooltip
+                popupTutorial.style.display = 'block';
             } else {
                 formWindow.focus();
             }
@@ -418,7 +391,10 @@ async function buyBooz() {
 // Event Listeners
 connectWalletBtn.addEventListener('click', connectWallet);
 buyButton.addEventListener('click', buyBooz);
-solAmountInput.addEventListener('input', debounce(() => updateCalculations(), 300));
+solAmountInput.addEventListener('input', debounce(updateCalculations, 300));
+closePopupBtn.addEventListener('click', () => {
+    popupTutorial.style.display = 'none';
+});
 
 // Dynamic Button Enabling
 function updateButtonState() {
@@ -441,7 +417,7 @@ window.addEventListener('load', async () => {
     try {
         const solanaWeb3 = await waitForSolanaWeb3();
         console.log('solanaWeb3 loaded successfully:', solanaWeb3);
-        const testUrl = generatePreFilledFormUrl('test-wallet', 0.05, 230850, 'test-signature');
+        const testUrl = generatePreFilledFormUrl('test-wallet', 0.05, 250000, 'test-signature');
         console.log('Test Form URL:', testUrl);
     } catch (error) {
         console.error('solanaWeb3 failed to load:', error.message);
